@@ -15,4 +15,4 @@ jobs:
       - uses: actions/setup-go@v4
       - uses: actions/checkout@v3
       - uses: ko-build/setup-ko@v0.6
-      - run: ko build -B .
+      - run: ko build -B --platform=linux/amd64,linux/arm64 .
