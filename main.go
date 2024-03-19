@@ -104,7 +104,7 @@ func main() {
 
 type Manager struct {
 	logger       log.Logger
-	peer         cluster.ClusterPeer
+	peer         *cluster.Peer
 	settleCancel context.CancelFunc
 }
 
@@ -151,6 +151,10 @@ func (m *Manager) Run(ctx context.Context) error {
 
 func (m *Manager) StopAndWait() {
 	m.settleCancel()
+	if err := m.peer.Leave(10 * time.Second); err != nil {
+		level.Error(m.logger).Log("Unable to leave cluster", "error", err)
+	}
+	level.Debug(m.logger).Log("Quitting...")
 }
 
 func (m *Manager) http(t *template.Template) http.Handler {
