@@ -1,1 +1,2 @@
-defaultBaseImage: cgr.dev/chainguard/curl:latest
+# Useful to have both a shell and cURL, needed for health checks
+defaultBaseImage: cgr.dev/chainguard/bash:latest

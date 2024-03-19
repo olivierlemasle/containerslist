@@ -26,15 +26,14 @@ const (
 	defaultGossipInterval     = 200 * time.Millisecond
 	defaultConfigPollInterval = time.Minute
 
-	tpl = `
-<!DOCTYPE html>
+	tpl = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
     <title>containerlist</title>
   </head>
   <body>
-    <p>Name: {{ .Name }}</p>
+    <p>Node name: {{ .Name }}</p>
     <p>Status: {{ .Status }}</p>
     <p>Peers:</p>
     <ul>
