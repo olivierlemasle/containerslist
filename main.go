@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -87,9 +88,21 @@ func main() {
 	go m.Run(ctx)
 
 	s := &http.Server{
-		Addr:    *httpAddr,
-		Handler: m.http(t),
+		Addr: *httpAddr,
 	}
+
+	http.HandleFunc("/resolve", func(w http.ResponseWriter, r *http.Request) {
+		if host := r.URL.Query().Get("host"); host != "" {
+			ips, err := net.LookupIP(host)
+			if err != nil {
+				fmt.Fprintf(w, "Error: %v", err)
+			}
+			fmt.Fprintf(w, "%v: %v", host, ips)
+		} else {
+			fmt.Fprintln(w, "Use  /resolve?host=host")
+		}
+	})
+	http.Handle("/", m.http(t))
 
 	go func() {
 		if err := s.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
